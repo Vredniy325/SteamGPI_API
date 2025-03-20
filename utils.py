@@ -1,6 +1,5 @@
 import requests
 import json
-import fastapi
 
 def get_game_info (appid: int, region: str = "ru", language: str = "en"):
     """
@@ -22,9 +21,7 @@ def get_game_info (appid: int, region: str = "ru", language: str = "en"):
         data = response.json()
         json_str = json.dumps(data, indent = 4)
 
-        with open('app_info.json', 'w', encoding="utf-8") as f:
-            f.write("")
-        f.close()
+        
 
         with open('app_info.json', 'a', encoding="utf-8") as f:
             f.write(json_str)
@@ -82,27 +79,32 @@ def get_info_across_regions(appid: int, regions: list) -> list:
     return all_data
 
 def out_res(results):
-        for region_info in results:
-            if region_info.get("available"):
-                print("\nСравнение по регионам:")
-                print(f"\nРегион: {region_info['region']}")
-                print(f"Игра: {region_info['name']}")
-                print(f"Цена без скидки: {region_info['initial_price']} {region_info['currency']}")
-                print(f"Цена со скидкой: {region_info['final_price']} {region_info['currency']}")
-                print(f"Скидка: {region_info['discount_percent']}%")
-            elif region_info.get("break"):
-                print("Game not found.")
-                break
-
-
-if __name__ == "__main__":
     appid = int(input("Введите AppID игры: "))
 
     # Список популярных регионов
     popular_regions = ["ru", "us", "eu", "tr", "kz"]
 
+    with open('app_info.json', 'w', encoding="utf-8") as f:
+        f.write("")
+    f.close()
+    
     results = get_info_across_regions(appid, popular_regions)
-    out_res(results)
+
+    for region_info in results:
+        if region_info.get("available"):
+            print("\nСравнение по регионам:")
+            print(f"\nРегион: {region_info['region']}")
+            print(f"Игра: {region_info['name']}")
+            print(f"Цена без скидки: {region_info['initial_price']} {region_info['currency']}")
+            print(f"Цена со скидкой: {region_info['final_price']} {region_info['currency']}")
+            print(f"Скидка: {region_info['discount_percent']}%")
+        elif region_info.get("break"):
+            print("Game not found.")
+            break
+
+
+
+    
     
 
     
