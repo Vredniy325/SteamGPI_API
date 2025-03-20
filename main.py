@@ -6,5 +6,5 @@ from typing import Optional
 app = FastAPI()
 
 @app.get("/")
-def get_game_info():
+def home_page():
     return out_res()

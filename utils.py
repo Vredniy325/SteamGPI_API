@@ -78,7 +78,7 @@ def get_info_across_regions(appid: int, regions: list) -> list:
         all_data.append(info)
     return all_data
 
-def out_res(results):
+def out_res():
     appid = int(input("Введите AppID игры: "))
 
     # Список популярных регионов
