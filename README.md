@@ -67,7 +67,7 @@ GET /game/{appid}
 JSON-объект с информацией о продукте.
 
 #### Пример запроса:
-GET /game/570?region=us&language=en
+GET /game/632360?region=us&language=en
 
 #### Пример ответа:
 ```json
@@ -99,7 +99,7 @@ GET /game/{appid}/regions
 JSON-массив с информацией по каждому региону.
 
 #### Пример запроса:
-GET /game/570/regions?regions=ru,us
+GET /game/3159330/regions?regions=ru,us
 
 #### Пример ответа:
 ```json
