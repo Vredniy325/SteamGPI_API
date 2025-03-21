@@ -36,9 +36,9 @@ def get_game_info (appid: int, region: str = "ru", language: str = "en"):
             }
 
         game_data = data[str(appid)]["data"]
-        price_info = game_data.get("price_overview")
-
-        result = {
+        try:    
+            price_info = game_data.get("price_overview")
+            result = {
             "appid": appid,
             "region": region,
             "name": game_data.get("name", "Неизвестно"),
@@ -50,7 +50,23 @@ def get_game_info (appid: int, region: str = "ru", language: str = "en"):
             "discount_percent": price_info.get("discount_percent") if price_info else 0,
             "platforms": game_data.get("platforms", {}),
             "release_date": game_data.get("release_date", {}).get("date")
-        }
+            }
+        except Exception as e:
+            result = {
+            "appid": appid,
+            "region": region,
+            "name": game_data.get("name", "Неизвестно"),
+            "available": True,
+            "is_free": game_data.get("is_free", False),
+            "currency": price_info.get("currency") if price_info else None,
+            "initial_price": price_info.get("initial") / 100 if price_info else None,
+            "final_price": price_info.get("final") / 100 if price_info else None,
+            "discount_percent": price_info.get("discount_percent") if price_info else 0,
+            "platforms": game_data.get("platforms", {}),
+            "release_date": game_data.get("release_date", {}).get("date")
+            }
+
+        
         return result
 
     except Exception as e:
@@ -101,6 +117,8 @@ def out_res():
         elif region_info.get("break"):
             print("Game not found.")
             break
+
+out_res()
 
 
 
