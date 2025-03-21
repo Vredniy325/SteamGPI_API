@@ -54,12 +54,12 @@ GET /game/570?region=us&language=en
 #### Пример ответа:
 ```json
 {
-  "appid": 570,
+  "appid": 632360,
   "region": "us",
-  "name": "Dota 2",
+  "name": "Risk of Rain 2",
   "available": true,
-  "initial_price": 0,
-  "final_price": 0,
+  "initial_price": 24.99,
+  "final_price": 24.99,
   "currency": "USD",
   "discount_percent": 0
 }
@@ -81,26 +81,24 @@ GET /game/{appid}/regions
 JSON-массив с информацией по каждому региону.
 
 #### Пример запроса:
-GET /game/570/regions?regions=ru,us,eu,tr
+GET /game/570/regions?regions=ru,us
 
 #### Пример ответа:
 ```json
 [
   {
+    "appid": 3159330,
     "region": "ru",
-    "name": "Dota 2",
-    "available": true,
-    "initial_price": 0,
-    "final_price": 0,
-    "currency": "RUB",
-    "discount_percent": 0
+    "name": "Assassin’s Creed Shadows",
+    "available": false
   },
   {
+    "appid": 3159330,
     "region": "us",
-    "name": "Dota 2",
+    "name": "Assassin’s Creed Shadows",
     "available": true,
-    "initial_price": 0,
-    "final_price": 0,
+    "initial_price": 69.99,
+    "final_price": 69.99,
     "currency": "USD",
     "discount_percent": 0
   }
