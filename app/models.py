@@ -1,34 +1,33 @@
-from sqlalchemy import Column, Integer, String, ForeignKey
-from sqlalchemy.dialects.postgresql import MONEY,JSONB,TIMESTAMP
+from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey, JSON
+from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
-from app.database import Base
-import datetime
+from sqlalchemy.dialects.postgresql import JSONB, MONEY
+
+Base = declarative_base()
 
 class Game(Base):
     __tablename__ = "games"
-    
+
     appid = Column(Integer, primary_key=True, index=True)
-    data = Column(JSONB)
-    updated_at = Column(TIMESTAMP, default=datetime.datetime.utcnow)
+    data = Column(JSONB, nullable=False)
+    updated_at = Column(TIMESTAMP, nullable=False)
+
 
 class User(Base):
     __tablename__ = "users"
-    
+
     userid = Column(Integer, primary_key=True, index=True)
     login = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
 
-    alerts = relationship("Alert", back_populates="user")
-
 
 class Alert(Base):
     __tablename__ = "alerts"
-    
+
     alertid = Column(Integer, primary_key=True, index=True)
-    userid = Column(Integer, ForeignKey("users.userid"), nullable=False)
-    appid = Column(Integer, ForeignKey("games.appid"), nullable=False)
-    price = Column(MONEY, nullable=False)
+    userid = Column(Integer, ForeignKey("users.userid", ondelete="CASCADE"))
+    appid = Column(Integer, ForeignKey("games.appid", ondelete="CASCADE"))
+    price = Column(String, nullable=False)  # Using String instead of Money for better cross-compatibility
 
-    user = relationship("User", back_populates="alerts")
-
-
+    user = relationship("User")
+    game = relationship("Game")

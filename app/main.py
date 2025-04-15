@@ -1,15 +1,25 @@
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
-from app import routes
+from fastapi.middleware.cors import CORSMiddleware
+from . import routes
 
 app = FastAPI(
-    title="SteamGPI API",
-    description="API для мониторинга цен и доступности игр в Steam по регионам",
+    title="Steam GeoPricing Inspector API",
+    description="Сервис для мониторинга цен и доступности игр в Steam по регионам.",
     version="1.0.0"
 )
 
-app.include_router(routes.router)
+# Разрешённые источники (можно ограничить для фронта)
+origins = [
+    "*",  # В продакшене заменить на URL расширения или фронта
+]
 
-@app.get("/", response_class=JSONResponse)
-async def root():
-    return {"message": "Добро пожаловать в SteamGPI API!"}
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Подключаем маршруты
+app.include_router(routes.router)

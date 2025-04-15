@@ -1,8 +1,9 @@
 import requests
-import json
+from typing import List, Dict, Any
 
-def fetch_game_info(appid: int, region: str = "ru", language: str = "en") -> dict:
-    url = "https://store.steampowered.com/api/appdetails"
+STEAM_API_URL = "https://store.steampowered.com/api/appdetails"
+
+def get_game_info(appid: int, region: str = "ru", language: str = "en") -> Dict[str, Any]:
     params = {
         "appids": appid,
         "cc": region,
@@ -10,21 +11,21 @@ def fetch_game_info(appid: int, region: str = "ru", language: str = "en") -> dic
     }
 
     try:
-        response = requests.get(url, params=params, timeout=10)
+        response = requests.get(STEAM_API_URL, params=params, timeout=10)
         data = response.json()
 
         if not data.get(str(appid), {}).get("success"):
             return {
                 "appid": appid,
                 "region": region,
-                "available": False,
+                "break": True,
                 "message": "Game not found"
             }
 
         game_data = data[str(appid)]["data"]
         price_info = game_data.get("price_overview")
 
-        return {
+        result = {
             "appid": appid,
             "region": region,
             "name": game_data.get("name", "Unknown"),
@@ -37,6 +38,7 @@ def fetch_game_info(appid: int, region: str = "ru", language: str = "en") -> dic
             "platforms": game_data.get("platforms", {}),
             "release_date": game_data.get("release_date", {}).get("date")
         }
+        return result
 
     except Exception as e:
         return {
@@ -46,5 +48,9 @@ def fetch_game_info(appid: int, region: str = "ru", language: str = "en") -> dic
             "error": str(e)
         }
 
-def fetch_game_info_multiple_regions(appid: int, regions: list[str]) -> list[dict]:
-    return [fetch_game_info(appid, region) for region in regions]
+def get_info_across_regions(appid: int, regions: List[str]) -> List[Dict[str, Any]]:
+    all_data = []
+    for region in regions:
+        info = get_game_info(appid, region)
+        all_data.append(info)
+    return all_data
