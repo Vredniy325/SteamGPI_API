@@ -102,3 +102,4 @@ def out_res():
             print(f"\n{region_info['region']} ➜ Ошибка: {region_info.get('error')}")
 
 
+out_res()

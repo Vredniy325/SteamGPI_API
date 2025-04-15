@@ -1,6 +1,8 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, MONEY
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.dialects.postgresql import MONEY,JSONB,TIMESTAMP
 from sqlalchemy.orm import relationship
 from app.database import Base
+import datetime
 
 class Game(Base):
     __tablename__ = "games"
