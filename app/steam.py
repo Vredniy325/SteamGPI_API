@@ -1,5 +1,6 @@
 import requests
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Union
+from app.schemas import GameResponse  # Import the GameResponse schema
 
 STEAM_API_URL = "https://store.steampowered.com/api/appdetails"
 
@@ -29,13 +30,10 @@ def get_game_info(appid: int, region: str = "ru", language: str = "en") -> Dict[
             "appid": appid,
             "region": region,
             "name": game_data.get("name", "Unknown"),
-            "available": True,
             "is_free": game_data.get("is_free", False),
             "currency": price_info.get("currency") if price_info else None,
             "initial_price": price_info.get("initial") / 100 if price_info else None,
             "final_price": price_info.get("final") / 100 if price_info else None,
-            "discount_percent": price_info.get("discount_percent") if price_info else 0,
-            "platforms": game_data.get("platforms", {}),
             "release_date": game_data.get("release_date", {}).get("date")
         }
         return result
@@ -51,6 +49,8 @@ def get_game_info(appid: int, region: str = "ru", language: str = "en") -> Dict[
 def get_info_across_regions(appid: int, regions: List[str]) -> List[Dict[str, Any]]:
     all_data = []
     for region in regions:
+        print(f"Fetching data from API for appid: {appid}, region: {region}")
         info = get_game_info(appid, region)
+        print(f"INFO ABOUT GAME {appid}: ",info,"\n\n\n")
         all_data.append(info)
     return all_data

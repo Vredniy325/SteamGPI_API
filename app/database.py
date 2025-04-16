@@ -1,21 +1,20 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy.engine.url import URL
 import os
 
 DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://postgres:postgres@localhost:5432/SteamGPI_API")
 
-# Создание объекта движка для подключения к базе данных
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+# Create the engine for connecting to the database without check_same_thread
+engine = create_engine(DATABASE_URL)
 
-# Создание базы данных с использованием SQLAlchemy
+# Create the database using SQLAlchemy
 Base = declarative_base()
 
-# Сессия для общения с БД
+# Session for communicating with the DB
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Функция для получения сессии
+# Function to get a session
 def get_db():
     db = SessionLocal()
     try:
